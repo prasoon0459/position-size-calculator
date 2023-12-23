@@ -4,7 +4,7 @@ import axios from "axios";
 import * as React from 'react';
 import { CssBaseline, AppBar, Button, Toolbar, Box, Typography, Grid, Paper, Container, useMediaQuery, TextField } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import { red } from '@mui/material/colors';
 
 function App() {
 
@@ -14,6 +14,8 @@ function App() {
   const [entryPrice, setEntryprice] = React.useState()
   const [invalidationPrice, setInvalidationPrice] = React.useState()
   const [risk, setRisk] = React.useState()
+
+  const [globalError, setglobalError] = React.useState("")
   
   const [entryPriceError, setEntrypriceError] = React.useState(false)
   const [invalidationPriceError, setInvalidationPriceError] = React.useState(false)
@@ -21,6 +23,7 @@ function App() {
   const errorHelperText = "Please input a number"
 
   const handleEntryPriceChange = (value) =>{
+    setglobalError("")
     setEntryprice(value)
     if(isNaN(value)){
       setEntrypriceError(true)
@@ -31,6 +34,7 @@ function App() {
   }
 
   const handleInvalidationPriceChange = (value) => {
+    setglobalError("")
     setInvalidationPrice(value)
     if(isNaN(value)){
       setInvalidationPriceError(true)
@@ -60,16 +64,26 @@ function App() {
   );
 
   const handleSubmit = () => {
+    setglobalError("")
+    setPositionSize(null)
+    var errorState = false
     if(isNaN(entryPrice)){
       setEntrypriceError(true)
+      errorState=true
     }
     if(isNaN(invalidationPrice)){
       setInvalidationPriceError(true)
+      errorState=true
     }
     if(isNaN(risk)){
+      errorState=true
       setRiskError(true)
     }
-    if(entryPriceError||invalidationPriceError||riskError){
+    if(entryPrice == invalidationPrice){
+      errorState=true
+      setglobalError("Entry price and Invalidation price can't be same")
+    }
+    if(errorState){
       return
     }
     // send HTTP request
@@ -78,8 +92,8 @@ function App() {
       "invalidationPrice":invalidationPrice,
       "risk":risk
     }).then((response) => {
-      var size = response.data['positionSize']
-      setPositionSize(size)
+      var size = response.data['size']
+      setPositionSize(Math.round(size*1000)/1000)
     })
   }
 
@@ -103,7 +117,7 @@ function App() {
             justifyContent="center"
             sx={{ minHeight: '100vh' }}>
             <Container component="main" maxWidth="sm" >
-              <Paper variant="elevation" square={false}  elevation={3}  sx={{padding:3}}>
+              <Paper variant="elevation" square={false}  elevation={10}  sx={{padding:3, borderRadius:5}}>
                 <Grid sx={{ display: 'flex', marginBottom:3 }} alignItems="center" justifyContent="center" >
                   <Typography component="h1" variant="h5" align="center">
                     Position Size Calculator
@@ -129,6 +143,11 @@ function App() {
                       }}
                     /> 
                   </Box>
+                  {globalError!=="" && (
+                    <Typography variant="caption" color="red">
+                      {globalError}
+                    </Typography>)
+                  }
                   <Grid container sx={{ padding:1}} justifyContent="flex-end" direction="row" alignItems="center">
                     <Button sx={{padding:1, textTransform: "uppercase", letterSpacing:"0.1em"}} size='large' onClick={handleSubmit}>
                       Submit
@@ -144,7 +163,7 @@ function App() {
                         </Grid>
                         <Grid sx={{display:'flex', marginTop:2}} direction="row" alignItems="center" justifyContent="flex-start">
                           <Typography variant='body1' >
-                            The position size should be {positionSize}.
+                            The position size should be <span style={{fontWeight:'bold', fontSize:"large"}}>{positionSize}</span>
                           </Typography>
                         </Grid>
                       </Grid>
