@@ -87,14 +87,16 @@ function App() {
       return
     }
     // send HTTP request
-    axios.post("http://localhost:8000/calculate", {
-      "entryPrice": entryPrice,
-      "invalidationPrice":invalidationPrice,
-      "risk":risk
-    }).then((response) => {
-      var size = response.data['size']
-      setPositionSize(Math.round(size*1000)/1000)
-    })
+    // axios.post("http://localhost:8000/calculate", {
+    //   "entryPrice": entryPrice,
+    //   "invalidationPrice":invalidationPrice,
+    //   "risk":risk
+    // }).then((response) => {
+    //   var size = response.data['size']
+    //   setPositionSize(Math.round(size*1000)/1000)
+    // })
+    var size = risk/(Math.abs(entryPrice - invalidationPrice))
+    setPositionSize(Math.round(size*1000)/1000)
   }
 
   return (
