@@ -25,10 +25,10 @@ function App() {
   const handleEntryPriceChange = (value) =>{
     setglobalError("")
     setEntryprice(value)
-    if(isNaN(value)){
+    if (isNaN(value)) {
       setEntrypriceError(true)
     }
-    else{
+    else {
       setEntrypriceError(false)
     }
   }
@@ -36,20 +36,20 @@ function App() {
   const handleInvalidationPriceChange = (value) => {
     setglobalError("")
     setInvalidationPrice(value)
-    if(isNaN(value)){
+    if (isNaN(value)) {
       setInvalidationPriceError(true)
     }
-    else{
+    else {
       setInvalidationPriceError(false)
     }
   }
 
   const handleRiskChange = (value) => {
     setRisk(value)
-    if(isNaN(value)){
+    if (isNaN(value)) {
       setRiskError(true)
     }
-    else{
+    else {
       setRiskError(false)
     }
   }
@@ -71,7 +71,7 @@ function App() {
       setEntrypriceError(true)
       errorState=true
     }
-    if(isNaN(invalidationPrice)){
+    if (isNaN(invalidationPrice)) {
       setInvalidationPriceError(true)
       errorState=true
     }
@@ -101,18 +101,19 @@ function App() {
 
   return (
     <div className="App">
-      <React.Fragment>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <AppBar
-            position="absolute"
-            color="secondary"
-            elevation={2}
-          >
-                <Typography variant="h5" color="inherit" sx={{ textAlign: 'left', margin:2 }} noWrap>
-                  Ishank's Position Size Calculator
-                </Typography>
-          </AppBar>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AppBar
+          position="absolute"
+          color="secondary"
+          elevation={2}
+        >
+          <Typography variant="h5" color="inherit" sx={{ textAlign: 'left', margin: 2 }} noWrap>
+            Ishank's Position Size Calculator
+          </Typography>
+        </AppBar>
+
+        <React.Fragment>
           <Grid container spacing={0}
             direction="column"
             alignItems="center"
@@ -126,24 +127,24 @@ function App() {
                   </Typography>
                 </Grid>
                 <React.Fragment>
-                  <Box sx={{ display: 'flex'}}>
-                    <TextField error={entryPriceError} helperText={entryPriceError?errorHelperText:null} id="outlined-basic" fullWidth label="Entry Price ($)" variant="outlined" sx={{margin:1}} 
+                  <Box sx={{ display: 'flex' }}>
+                    <TextField error={entryPriceError} helperText={entryPriceError ? errorHelperText : null} id="outlined-basic" fullWidth label="Entry Price ($)" variant="outlined" sx={{ margin: 1 }}
                       onChange={(event) => {
                         handleEntryPriceChange(event.target.value)
                       }}
-                    /> 
-                    <TextField error={invalidationPriceError}helperText={invalidationPriceError?errorHelperText:null} id="outlined-basic" fullWidth label="Invalidation Price ($)" variant="outlined" sx={{margin:1}} 
+                    />
+                    <TextField error={invalidationPriceError} helperText={invalidationPriceError ? errorHelperText : null} id="outlined-basic" fullWidth label="Invalidation Price ($)" variant="outlined" sx={{ margin: 1 }}
                       onChange={(event) => {
                         handleInvalidationPriceChange(event.target.value)
                       }}
-                    /> 
+                    />
                   </Box>
-                  <Box sx={{ display: 'flex'}} >
-                    <TextField error={riskError} helperText={riskError?errorHelperText:null} id="outlined-basic" fullWidth label="Risk ($)" variant="outlined" sx={{margin:1}} 
+                  <Box sx={{ display: 'flex' }} >
+                    <TextField error={riskError} helperText={riskError ? errorHelperText : null} id="outlined-basic" fullWidth label="Risk ($)" variant="outlined" sx={{ margin: 1 }}
                       onChange={(event) => {
                         handleRiskChange(event.target.value)
                       }}
-                    /> 
+                    />
                   </Box>
                   {globalError!=="" && (
                     <Typography variant="caption" color="red">
@@ -156,14 +157,14 @@ function App() {
                     </Button>
                   </Grid>
                   <div>
-                    {positionSize!=null && (
-                      <Grid container justifyContent="flex-start" direction="column" alignItems="flex-start" sx={{padding:1}}>
-                        <Grid sx={{display:'flex'}} direction="row" alignItems="center" justifyContent="flex-start">
+                    {positionSize != null && (
+                      <Grid container justifyContent="flex-start" direction="column" alignItems="flex-start" sx={{ padding: 1 }}>
+                        <Grid sx={{ display: 'flex' }} direction="row" alignItems="center" justifyContent="flex-start">
                           <Typography variant='h6' >
                             Results :
                           </Typography>
                         </Grid>
-                        <Grid sx={{display:'flex', marginTop:2}} direction="row" alignItems="center" justifyContent="flex-start">
+                        <Grid sx={{ display: 'flex', marginTop: 2 }} direction="row" alignItems="center" justifyContent="flex-start">
                           <Typography variant='body1' >
                             The position size should be <span style={{fontWeight:'bold', fontSize:"large"}}>{positionSize}</span>
                           </Typography>
@@ -175,8 +176,8 @@ function App() {
               </Paper>
             </Container>
           </Grid>
-        </ThemeProvider>
-      </React.Fragment>
+        </React.Fragment>
+      </ThemeProvider>
     </div>
   );
 }
