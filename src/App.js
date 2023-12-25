@@ -6,6 +6,7 @@ import { CssBaseline, AppBar, Button, Toolbar, Box, Typography, Grid, Paper, Con
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
 
+
 function App() {
 
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -21,6 +22,8 @@ function App() {
   const [invalidationPriceError, setInvalidationPriceError] = React.useState(false)
   const [riskError, setRiskError] = React.useState(false)
   const errorHelperText = "Please input a number"
+  
+ 
 
   const handleEntryPriceChange = (value) =>{
     setglobalError("")
@@ -63,6 +66,9 @@ function App() {
     [prefersDarkMode],
   );
 
+  
+  
+
   const handleSubmit = () => {
     setglobalError("")
     setPositionSize(null)
@@ -86,19 +92,22 @@ function App() {
     if(errorState){
       return
     }
-    // send HTTP request
-    axios.post("http://localhost:8000/calculate", {
-      "entryPrice": entryPrice,
-      "invalidationPrice":invalidationPrice,
-      "risk":risk
-    }).then((response) => {
-      var size = response.data['size']
-      setPositionSize(Math.round(size*1000)/1000)
-    })
+
+    
+    var size = risk/(Math.abs(entryPrice - invalidationPrice))
+    setPositionSize(Math.round(size*1000)/1000)
   }
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Prevents the default action of the enter key
+      handleSubmit();
+    }
+  };
 
   return (
     <div className="App">
+      
       <React.Fragment>
         <ThemeProvider theme={theme}>
           <CssBaseline />
@@ -108,7 +117,7 @@ function App() {
             elevation={2}
           >
                 <Typography variant="h5" color="inherit" sx={{ textAlign: 'left', margin:2 }} noWrap>
-                  Ishank's Position Size Calculator
+                  Position Size Calculator
                 </Typography>
           </AppBar>
           <Grid container spacing={0}
@@ -126,11 +135,13 @@ function App() {
                 <React.Fragment>
                   <Box sx={{ display: 'flex'}}>
                     <TextField error={entryPriceError} helperText={entryPriceError?errorHelperText:null} id="outlined-basic" fullWidth label="Entry Price ($)" variant="outlined" sx={{margin:1}} 
+                      onKeyPress={handleKeyPress}
                       onChange={(event) => {
                         handleEntryPriceChange(event.target.value)
                       }}
                     /> 
                     <TextField error={invalidationPriceError}helperText={invalidationPriceError?errorHelperText:null} id="outlined-basic" fullWidth label="Invalidation Price ($)" variant="outlined" sx={{margin:1}} 
+                      onKeyPress={handleKeyPress}
                       onChange={(event) => {
                         handleInvalidationPriceChange(event.target.value)
                       }}
@@ -138,6 +149,7 @@ function App() {
                   </Box>
                   <Box sx={{ display: 'flex'}} >
                     <TextField error={riskError} helperText={riskError?errorHelperText:null} id="outlined-basic" fullWidth label="Risk ($)" variant="outlined" sx={{margin:1}} 
+                      onKeyPress={handleKeyPress}
                       onChange={(event) => {
                         handleRiskChange(event.target.value)
                       }}
@@ -168,6 +180,7 @@ function App() {
                         </Grid>
                       </Grid>
                     )}
+  
                   </div>
                 </React.Fragment>
               </Paper>
